@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoFlow AI — Workflow Automation & Gemini Agents</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <!-- Global App Header -->
+  <header class="app-header">
+    <div class="brand" onclick="window.app.switchView('editor')">
+      <div class="logo-icon">⚡</div>
+      <span>AutoFlow <span style="color: var(--accent-purple);">AI</span></span>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-view="editor">Workflow Editor</button>
+      <button class="nav-tab" data-view="workflows">Workflows</button>
+      <button class="nav-tab" data-view="executions">Executions</button>
+      <button class="nav-tab" data-view="credentials">Credentials</button>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn btn-secondary btn-sm" id="export-n8n-btn" title="Export in n8n-compatible format">Export n8n</button>
+      <button class="btn btn-secondary btn-sm" id="export-autoflow-btn" title="Export native AutoFlow format">Export JSON</button>
+      <button class="btn btn-secondary btn-sm" id="import-workflow-btn">Import</button>
+    </div>
+  </header>
+
+  <!-- 1. Visual Workflow Editor View -->
+  <main class="view-container active" id="view-editor">
+    <!-- Left Sidebar: Node Palette -->
+    <aside class="editor-sidebar">
+      <div class="sidebar-header">
+        <span>Nodes Palette</span>
+      </div>
+      <input type="text" class="palette-search" id="palette-search" placeholder="Search nodes (e.g. Gemini, HTTP, IF)..." />
+      <div class="palette-category-list" id="palette-categories">
+        <!-- Populated dynamically by editor.js -->
+      </div>
+    </aside>
+
+    <!-- Canvas Area -->
+    <div class="canvas-wrapper" id="canvas-wrapper">
+      <!-- Floating Canvas Toolbar -->
+      <div class="editor-toolbar">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="text" class="workflow-name-input" id="workflow-title-input" value="Untitled Workflow" />
+          <button class="btn btn-secondary btn-sm" id="workflow-active-toggle">Inactive</button>
+        </div>
+        <div class="toolbar-buttons">
+          <button class="btn btn-secondary btn-sm" id="save-workflow-btn">Save</button>
+          <button class="btn btn-primary btn-sm" id="execute-workflow-btn">▶ Test Workflow</button>
+        </div>
+      </div>
+
+      <!-- Canvas SVG & Plane -->
+      <svg class="connections-svg" id="connections-svg"></svg>
+      <div class="canvas-plane" id="canvas-plane">
+        <!-- Nodes injected dynamically by canvas.js -->
+      </div>
+
+      <!-- Right Node Settings Drawer -->
+      <div class="node-drawer" id="node-drawer">
+        <div class="drawer-header">
+          <div class="drawer-title" id="drawer-node-title">Node Settings</div>
+          <button class="btn-icon" id="close-drawer-btn">✕</button>
+        </div>
+        <div class="drawer-body" id="drawer-form">
+          <!-- Form controls dynamically rendered by editor.js -->
+        </div>
+        <div style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
+          <button class="btn btn-danger btn-sm" id="drawer-delete-node-btn">Delete Node</button>
+        </div>
+      </div>
+
+      <!-- Bottom Debug Panel -->
+      <div class="debug-panel" id="debug-panel">
+        <div class="debug-header">
+          <div style="font-weight: 600; font-size: 0.88rem;" id="debug-node-title">Execution Data</div>
+          <button class="btn-icon" id="close-debug-btn">✕</button>
+        </div>
+        <div class="debug-content">
+          <div class="debug-column">
+            <div class="debug-column-header">Input Data Received</div>
+            <pre class="debug-column-body" id="debug-input-data"></pre>
+          </div>
+          <div class="debug-column">
+            <div class="debug-column-header">Output Data Produced</div>
+            <pre class="debug-column-body" id="debug-output-data"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 2. Workflows Dashboard View -->
+  <section class="view-container" id="view-workflows">
+    <div class="dashboard-view">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title">Workflows</h1>
+        <button class="btn btn-primary" id="new-workflow-btn">+ New Workflow</button>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Workflow Name</th>
+            <th>Status</th>
+            <th>Nodes</th>
+            <th>Last Updated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="workflows-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3. Executions History View -->
+  <section class="view-container" id="view-executions">
+    <div class="dashboard-view">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title">Execution History</h1>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Workflow</th>
+            <th>Status</th>
+            <th>Trigger Mode</th>
+            <th>Duration</th>
+            <th>Started At</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody id="executions-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 4. Credentials View -->
+  <section class="view-container" id="view-credentials">
+    <div class="dashboard-view">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title">Credentials & API Keys</h1>
+        <button class="btn btn-primary" id="new-credential-btn">+ Add Credential</button>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Credential Type</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="credentials-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Import Modal -->
+  <div class="modal-overlay" id="import-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size: 1.1rem; color: #fff;">Import Workflow JSON</h3>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+          Paste an exported AutoFlow AI JSON or standard n8n workflow JSON below:
+        </p>
+        <textarea id="import-json-textarea" class="form-control" rows="10" placeholder="{ ... }"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-import-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-import-btn">Import Workflow</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Credential Modal -->
+  <div class="modal-overlay" id="credential-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size: 1.1rem; color: #fff;">Add New Credential</h3>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Credential Name</label>
+          <input type="text" id="cred-name" class="form-control" placeholder="e.g. My Google AI Studio Key" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select id="cred-type" class="form-control">
+            <option value="gemini_api_key">Google Gemini API Key</option>
+            <option value="bearer_token">Bearer Token</option>
+            <option value="basic_auth">Basic Auth (Username / Password)</option>
+          </select>
+        </div>
+        <div class="form-group" id="cred-user-group" style="display: none;">
+          <label class="form-label">Username</label>
+          <input type="text" id="cred-user" class="form-control" placeholder="admin" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Secret Value / API Key / Password</label>
+          <input type="password" id="cred-secret" class="form-control" placeholder="Enter secret (stored AES-256 encrypted)" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-cred-btn">Cancel</button>
+        <button class="btn btn-primary" id="save-cred-btn">Save Credential</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/js/canvas.js"></script>
+  <script src="/js/editor.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
