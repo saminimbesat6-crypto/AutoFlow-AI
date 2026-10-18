@@ -20,6 +20,8 @@ export interface ExecuteOptions {
   startNodeId?: string;
   initialData?: DataItem[];
   saveExecution?: boolean;
+  onNodeStart?: (node: WorkflowNode) => void | Promise<void>;
+  onNodeFinish?: (nodeRecord: NodeExecutionRecord) => void | Promise<void>;
 }
 
 export class WorkflowExecutor {
@@ -114,6 +116,12 @@ export class WorkflowExecutor {
       const nodeStartedAt = new Date().toISOString();
       const nodeStartMs = Date.now();
 
+      if (options.onNodeStart) {
+        try {
+          await options.onNodeStart(node);
+        } catch (e) {}
+      }
+
       const nodeDef = this.nodeRegistry.get(node.type);
       if (!nodeDef) {
         const errMsg = `Unknown node type: "${node.type}". It is not registered in AutoFlow.`;
@@ -131,6 +139,11 @@ export class WorkflowExecutor {
           duration: Date.now() - nodeStartMs
         };
         nodeRecords.push(nodeRecord);
+        if (options.onNodeFinish) {
+          try {
+            await options.onNodeFinish(nodeRecord);
+          } catch (e) {}
+        }
 
         if (!node.continueOnFail) {
           overallStatus = 'error';
@@ -178,6 +191,11 @@ export class WorkflowExecutor {
           duration: nodeDuration
         };
         nodeRecords.push(nodeRecord);
+        if (options.onNodeFinish) {
+          try {
+            await options.onNodeFinish(nodeRecord);
+          } catch (e) {}
+        }
 
         if (!node.continueOnFail) {
           overallStatus = 'error';
@@ -202,6 +220,11 @@ export class WorkflowExecutor {
           duration: nodeDuration
         };
         nodeRecords.push(nodeRecord);
+        if (options.onNodeFinish) {
+          try {
+            await options.onNodeFinish(nodeRecord);
+          } catch (e) {}
+        }
         executedNodeIds.add(node.id);
 
         // Forward outputs to downstream connected nodes

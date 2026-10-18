@@ -17,6 +17,7 @@ import { createWorkflowRouter } from './api/routes/workflow-routes';
 import { createExecutionRouter } from './api/routes/execution-routes';
 import { createCredentialRouter } from './api/routes/credential-routes';
 import { createNodeTypeRouter } from './api/routes/node-type-routes';
+import { createAiAssistantRouter } from './api/routes/ai-assistant-routes';
 
 export function createApp() {
   const app = express();
@@ -55,6 +56,7 @@ export function createApp() {
   app.use('/api/executions', createExecutionRouter(db, executor));
   app.use('/api/credentials', createCredentialRouter(credentialsManager));
   app.use('/api/node-types', createNodeTypeRouter());
+  app.use('/api/ai/assistant', createAiAssistantRouter(credentialsManager));
 
   // Webhook Receiver Endpoint (supports all HTTP methods)
   app.all('/webhook/:path(*)', async (req: Request, res: Response) => {

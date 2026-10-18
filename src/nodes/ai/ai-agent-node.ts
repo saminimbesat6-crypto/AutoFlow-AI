@@ -23,10 +23,11 @@ export class AiAgentNode extends BaseNode {
       name: 'model',
       displayName: 'Model',
       type: 'options',
-      default: 'gemini-2.5-flash',
+      default: 'gemini-3.8-flash',
       options: [
-        { name: 'Gemini 2.5 Flash (Recommended for Agents)', value: 'gemini-2.5-flash' },
-        { name: 'Gemini 1.5 Pro (Complex Reasoning)', value: 'gemini-1.5-pro' }
+        { name: 'Gemini 3.8 Flash (Recommended for Agents)', value: 'gemini-3.8-flash' },
+        { name: 'Gemini 3.8 Pro (Complex Reasoning)', value: 'gemini-3.8-pro' },
+        { name: 'Gemini 1.5 Pro (Deep Analysis)', value: 'gemini-1.5-pro' }
       ]
     },
     {
@@ -78,7 +79,7 @@ export class AiAgentNode extends BaseNode {
     const results: DataItem[] = [];
 
     for (let i = 0; i < items.length; i++) {
-      const model = context.getNodeParameter('model', i, 'gemini-2.5-flash');
+      const model = context.getNodeParameter('model', i, 'gemini-3.8-flash');
       const goal = context.getNodeParameter('goal', i, '');
       const systemInstruction = context.getNodeParameter('systemInstruction', i, '');
       const enabledToolsMode = context.getNodeParameter('enabledTools', i, 'all');

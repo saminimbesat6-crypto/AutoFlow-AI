@@ -120,6 +120,42 @@ export function createWorkflowRouter(
     }
   });
 
+  // Real-time streaming workflow execution (Server-Sent Events)
+  router.get('/:id/execute-stream', async (req: Request, res: Response) => {
+    try {
+      const id = String(req.params.id);
+      const workflow = repo.getById(id);
+      if (!workflow) {
+        return res.status(404).json({ success: false, error: 'Workflow not found' });
+      }
+
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache, no-transform');
+      res.setHeader('Connection', 'keep-alive');
+      res.setHeader('X-Accel-Buffering', 'no');
+      res.flushHeaders?.();
+
+      res.write(`data: ${JSON.stringify({ type: 'start', workflowId: workflow.id, workflowName: workflow.name })}\n\n`);
+
+      const execution = await executor.execute(workflow, {
+        mode: 'manual',
+        onNodeStart: async (node) => {
+          res.write(`data: ${JSON.stringify({ type: 'node_start', nodeId: node.id, nodeName: node.name, nodeType: node.type })}\n\n`);
+        },
+        onNodeFinish: async (nodeRecord) => {
+          res.write(`data: ${JSON.stringify({ type: 'node_finish', record: nodeRecord })}\n\n`);
+        }
+      });
+
+      const details = executor.getExecution(execution.id);
+      res.write(`data: ${JSON.stringify({ type: 'complete', execution: details })}\n\n`);
+      res.end();
+    } catch (err: any) {
+      res.write(`data: ${JSON.stringify({ type: 'error', error: err.message })}\n\n`);
+      res.end();
+    }
+  });
+
   // Toggle active state
   router.post('/:id/activate', (req: Request, res: Response) => {
     try {

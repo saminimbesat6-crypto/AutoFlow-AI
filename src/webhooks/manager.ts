@@ -92,10 +92,32 @@ export class WebhookManager {
         initialData: [triggerItem]
       });
 
+      let finalStatusCode = execution.status === 'success' ? 200 : 500;
+      let responsePayload: any = execution;
+
+      if (execution.status === 'success') {
+        const details = this.executor.getExecution(execution.id);
+        if (details && details.nodes) {
+          // Find any executed node that generated _webhookResponse
+          for (const n of details.nodes) {
+            const outputs = n.outputData?.[0];
+            if (Array.isArray(outputs)) {
+              for (const item of outputs) {
+                if (item?.json?._webhookResponse) {
+                  finalStatusCode = item.json._webhookResponse.statusCode || 200;
+                  responsePayload = item.json._webhookResponse.body;
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+
       return {
         success: execution.status === 'success',
-        data: execution,
-        statusCode: execution.status === 'success' ? 200 : 500,
+        data: responsePayload,
+        statusCode: finalStatusCode,
         error: execution.errorMessage
       };
     } catch (err: any) {

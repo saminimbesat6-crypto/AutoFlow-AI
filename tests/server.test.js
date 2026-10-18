@@ -124,4 +124,82 @@ describe('AutoFlow AI HTTP API Integration Tests', () => {
     assert.strictEqual(n8nJson.name, 'API Webhook Test Workflow');
     assert.ok(n8nJson.connections['Webhook Trigger']);
   });
+
+  test('GET /api/ai/assistant/status returns connection state', async () => {
+    const res = await fetch(`${baseUrl}/api/ai/assistant/status`);
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.ok('connected' in data);
+  });
+
+  test('POST /api/ai/assistant/chat returns error when key is missing', async () => {
+    const savedKey = process.env.GEMINI_API_KEY;
+    delete process.env.GEMINI_API_KEY;
+    try {
+      const res = await fetch(`${baseUrl}/api/ai/assistant/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'Build a webhook flow' })
+      });
+
+      assert.strictEqual(res.status, 400);
+      const data = await res.json();
+      assert.strictEqual(data.needsApiKey, true);
+    } finally {
+      if (savedKey) process.env.GEMINI_API_KEY = savedKey;
+    }
+  });
+
+  test('GET /api/node-types includes all n8n parity nodes', async () => {
+    const res = await fetch(`${baseUrl}/api/node-types`);
+    const body = await res.json();
+    const types = body.data.map((n) => n.type);
+
+    assert.ok(types.includes('filter'), 'Should register filter node');
+    assert.ok(types.includes('delay'), 'Should register delay node');
+    assert.ok(types.includes('crypto'), 'Should register crypto node');
+    assert.ok(types.includes('webhook-response'), 'Should register webhook-response node');
+  });
+
+  test('GET /api/workflows/:id/execute-stream streams SSE events with node_start, node_finish, and complete', async () => {
+    const createRes = await fetch(`${baseUrl}/api/workflows`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Streaming Test Workflow',
+        nodes: [
+          {
+            id: 'node_m',
+            name: 'Manual Start',
+            type: 'manual-trigger',
+            position: { x: 50, y: 50 },
+            parameters: {}
+          },
+          {
+            id: 'node_c',
+            name: 'Hash Data',
+            type: 'crypto',
+            position: { x: 300, y: 50 },
+            parameters: { action: 'hash', algorithm: 'sha256', value: 'hello-streaming' }
+          }
+        ],
+        connections: [
+          { source: 'Manual Start', sourceOutput: 0, target: 'Hash Data', targetInput: 0 }
+        ],
+        active: false
+      })
+    });
+
+    const wf = (await createRes.json()).data;
+    const streamRes = await fetch(`${baseUrl}/api/workflows/${wf.id}/execute-stream`);
+    assert.strictEqual(streamRes.status, 200);
+    assert.ok(streamRes.headers.get('content-type').includes('text/event-stream'));
+
+    const streamText = await streamRes.text();
+    assert.ok(streamText.includes('"type":"start"'));
+    assert.ok(streamText.includes('"type":"node_start"'));
+    assert.ok(streamText.includes('"type":"node_finish"'));
+    assert.ok(streamText.includes('"type":"complete"'));
+  });
 });

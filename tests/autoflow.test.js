@@ -333,4 +333,57 @@ describe('AutoFlow AI Core Test Suite', () => {
       `Expected missing key error, got: ${res.errorMessage}`
     );
   });
+
+  test('8. Filter & Crypto Nodes: Process, route and hash data', async () => {
+    const executor = new WorkflowExecutor(db);
+
+    const testWorkflow = {
+      id: 'wf-crypto-filter-test',
+      name: 'Crypto & Filter Pipeline',
+      nodes: [
+        { id: 'start_node', name: 'Start', type: 'manual-trigger', position: { x: 0, y: 0 }, parameters: {} },
+        {
+          id: 'crypto_node',
+          name: 'Generate Hash',
+          type: 'crypto',
+          position: { x: 200, y: 0 },
+          parameters: {
+            action: 'hash',
+            algorithm: 'sha256',
+            value: 'AutoFlowTest123',
+            destinationField: 'sha256Hash'
+          }
+        },
+        {
+          id: 'filter_node',
+          name: 'Filter Items',
+          type: 'filter',
+          position: { x: 400, y: 0 },
+          parameters: {
+            value1: '{{ $json.sha256Hash }}',
+            operation: 'isNotEmpty'
+          }
+        }
+      ],
+      connections: [
+        { source: 'Start', sourceOutput: 0, target: 'Generate Hash', targetInput: 0 },
+        { source: 'Generate Hash', sourceOutput: 0, target: 'Filter Items', targetInput: 0 }
+      ],
+      settings: {},
+      active: false,
+      createdAt: '',
+      updatedAt: ''
+    };
+
+    const res = await executor.execute(testWorkflow, { mode: 'manual' });
+    assert.strictEqual(res.status, 'success');
+
+    const details = executor.getExecution(res.id);
+    const hashNode = details.nodes.find((n) => n.nodeId === 'crypto_node');
+    assert.ok(hashNode && hashNode.outputData[0][0].json.sha256Hash);
+    assert.strictEqual(hashNode.outputData[0][0].json.sha256Hash.length, 64); // sha256 hex is 64 chars
+
+    const filterNode = details.nodes.find((n) => n.nodeId === 'filter_node');
+    assert.strictEqual(filterNode.outputData[0].length, 1, 'Item should be kept by filter');
+  });
 });

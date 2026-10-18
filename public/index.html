@@ -22,6 +22,12 @@
     </nav>
 
     <div class="header-actions">
+      <button class="btn btn-ai-copilot btn-sm" id="ai-assistant-toggle-btn" title="Open Copilot Side Panel">
+        <span class="sparkle-icon">✨</span> Copilot Side
+      </button>
+      <button class="btn btn-secondary btn-sm" id="fullscreen-workflow-btn" title="Fullscreen view of workflow chart & output">
+        ⛶ Fullscreen & Output
+      </button>
       <button class="btn btn-secondary btn-sm" id="export-n8n-btn" title="Export in n8n-compatible format">Export n8n</button>
       <button class="btn btn-secondary btn-sm" id="export-autoflow-btn" title="Export native AutoFlow format">Export JSON</button>
       <button class="btn btn-secondary btn-sm" id="import-workflow-btn">Import</button>
@@ -50,6 +56,8 @@
           <button class="btn btn-secondary btn-sm" id="workflow-active-toggle">Inactive</button>
         </div>
         <div class="toolbar-buttons">
+          <button class="btn btn-ai-pill btn-sm" id="canvas-ai-copilot-btn">💬 Copilot Side</button>
+          <button class="btn btn-secondary btn-sm" id="canvas-fullscreen-btn" title="Fullscreen view of workflow chart & output">⛶ Fullscreen & Output</button>
           <button class="btn btn-secondary btn-sm" id="save-workflow-btn">Save</button>
           <button class="btn btn-primary btn-sm" id="execute-workflow-btn">▶ Test Workflow</button>
         </div>
@@ -74,6 +82,77 @@
           <button class="btn btn-danger btn-sm" id="drawer-delete-node-btn">Delete Node</button>
         </div>
       </div>
+
+      <!-- Gemini AI Copilot Chat Drawer -->
+      <div class="ai-copilot-drawer" id="ai-copilot-drawer">
+        <div class="drawer-header ai-header">
+          <div class="ai-title-badge">
+            <span class="ai-badge-icon">⚡</span>
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem; color: #fff;">Gemini AI Copilot</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px;" id="ai-key-status">
+                <span class="status-indicator"></span> Checking status...
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button class="btn-icon" id="clear-ai-chat-btn" title="Clear chat history" style="font-size: 0.85rem;">🗑️</button>
+            <button class="btn-icon" id="close-ai-drawer-btn" title="Close AI Copilot">✕</button>
+          </div>
+        </div>
+
+        <!-- Quick Gemini Key Setup Banner (shown when key is missing) -->
+        <div class="ai-key-banner" id="ai-key-banner" style="display: none;">
+          <div style="font-size: 0.8rem; color: #fde047; margin-bottom: 6px; font-weight: 500;">
+            🔑 Gemini API Key needed to generate workflows:
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <input type="password" id="ai-quick-key-input" class="form-control" style="font-size: 0.8rem; padding: 6px;" placeholder="AIzaSy..." />
+            <button class="btn btn-primary btn-sm" id="ai-save-key-btn">Save Key</button>
+          </div>
+        </div>
+
+        <!-- Chat messages area -->
+        <div class="ai-chat-body" id="ai-chat-body">
+          <div class="ai-message assistant">
+            <div class="ai-bubble">
+              <p>👋 <strong>Welcome to AutoFlow AI Copilot!</strong></p>
+              <p style="margin-top: 6px; font-size: 0.85rem; color: #cbd5e1;">Prompt me with any automation workflow requirement in plain English. I will generate and connect all nodes directly on your canvas.</p>
+              <div class="ai-prompt-chips">
+                <button class="ai-chip" data-prompt="Build a webhook pipeline that receives customer inquiries, uses Gemini to analyze sentiment and classify urgency, then routes urgent items to HTTP alert and non-urgent items to a log.">
+                  🚀 Webhook ➔ Gemini Sentiment ➔ Alert Routing
+                </button>
+                <button class="ai-chip" data-prompt="Create a daily scheduled workflow running every morning at 8am that fetches trending tech news via HTTP GET, summarizes top 3 stories using Gemini AI, and sends a webhook response.">
+                  ⏰ Daily 8am ➔ Fetch News ➔ Gemini Digest
+                </button>
+                <button class="ai-chip" data-prompt="Build an autonomous AI agent workflow that accepts research queries, uses built-in tools to calculate numbers and query workflow history, and returns a final verified summary.">
+                  🤖 Autonomous Multi-Turn AI Agent Loop
+                </button>
+                <button class="ai-chip" data-prompt="Add a 3-second delay and a cryptographic SHA256 hash node to the current workflow.">
+                  ⚡ Add Delay & Crypto Hash to current canvas
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="ai-chat-footer">
+          <div class="ai-input-container">
+            <textarea id="ai-chat-input" class="ai-chat-textarea" placeholder="Describe the workflow you want to build or modify... (Shift+Enter for newline)"></textarea>
+            <button class="ai-send-btn" id="ai-chat-send-btn" title="Send (Enter)">
+              <span id="ai-send-icon">➤</span>
+              <span id="ai-send-spinner" class="spinner" style="display: none;"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Always-Visible Floating AI Copilot Bubble on Canvas -->
+      <button class="floating-ai-copilot-bubble" id="floating-ai-copilot-bubble" title="Open Gemini AI Copilot">
+        <span class="floating-sparkle">✨</span>
+        <span class="floating-label">AI Copilot</span>
+      </button>
 
       <!-- Bottom Debug Panel -->
       <div class="debug-panel" id="debug-panel">
@@ -210,6 +289,53 @@
       <div class="modal-footer">
         <button class="btn btn-secondary" id="cancel-cred-btn">Cancel</button>
         <button class="btn btn-primary" id="save-cred-btn">Save Credential</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Workflow Flowchart & Output Modal -->
+  <div class="fullscreen-modal" id="fullscreen-workflow-modal">
+    <div class="fullscreen-header">
+      <div class="fullscreen-title-area">
+        <span class="fs-icon">⚡</span>
+        <div>
+          <div class="fs-title" id="fs-workflow-title">Workflow Flowchart & Output</div>
+          <div class="fs-subtitle" id="fs-workflow-meta">0 nodes · 0 connections</div>
+        </div>
+      </div>
+      <div class="fs-nav-tabs">
+        <button class="fs-tab active" data-fstab="chart">📊 Flowchart Chart</button>
+        <button class="fs-tab" data-fstab="output">📤 Execution Output</button>
+        <button class="fs-tab" data-fstab="json">📄 Workflow JSON</button>
+      </div>
+      <div class="fs-actions">
+        <button class="btn btn-primary btn-sm" id="fs-run-btn">▶ Run Workflow</button>
+        <button class="btn btn-secondary btn-sm" id="fs-copy-json-btn">📋 Copy JSON</button>
+        <button class="btn btn-icon" id="fs-close-btn" title="Exit Fullscreen">✕</button>
+      </div>
+    </div>
+    <div class="fullscreen-body">
+      <!-- 1. Flowchart Chart View -->
+      <div class="fs-panel active" id="fs-panel-chart">
+        <div class="fs-chart-wrapper" id="fs-chart-svg-container">
+          <!-- Flowchart nodes & svg connectors rendered dynamically -->
+        </div>
+      </div>
+      <!-- 2. Execution Output View -->
+      <div class="fs-panel" id="fs-panel-output">
+        <div class="fs-output-container">
+          <div class="fs-output-sidebar" id="fs-output-nodes-list">
+            <!-- Node selection pills -->
+          </div>
+          <div class="fs-output-content">
+            <div class="fs-output-header" id="fs-output-selected-node-title">Select a node to inspect output</div>
+            <pre class="fs-output-code" id="fs-output-code-viewer">// Run the workflow to inspect live output data</pre>
+          </div>
+        </div>
+      </div>
+      <!-- 3. Raw JSON View -->
+      <div class="fs-panel" id="fs-panel-json">
+        <pre class="fs-json-viewer" id="fs-json-code-viewer"></pre>
       </div>
     </div>
   </div>

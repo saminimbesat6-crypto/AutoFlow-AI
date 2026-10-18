@@ -9,7 +9,7 @@
 - **Interactive Visual Canvas**: Full-featured node-based workflow canvas with draggable nodes, cubic bezier connections, port snapping, pan & zoom, and live execution status indicators.
 - **Topological Execution Engine**: Deterministic DAG runner supporting linear flows, conditional branching (IF/Switch), multi-stream merges, sandboxed code execution, and data passing (`{{ $json.field }}` and `{{ $node["NodeName"].json }}`).
 - **First-Class Gemini AI Integration**:
-  - **Google Gemini Node**: Direct integration with Google AI Studio Generative Language API (`gemini-2.5-flash`, `gemini-1.5-pro`, `gemini-1.5-flash`), supporting custom prompts, system instructions, and structured JSON output.
+  - **Google Gemini Node**: Direct integration with Google AI Studio Generative Language API (`gemini-3.8-flash`, `gemini-3.8-pro`, `gemini-1.5-pro`, `gemini-1.5-flash`), supporting custom prompts, system instructions, and structured JSON output.
   - **Autonomous AI Agent Node**: Multi-turn agent loop with native function/tool calling (safe calculations, data lookups, web fetching, and time lookups).
 - **Embedded Database Architecture**: Powered by Node 24's native `node:sqlite` (`DatabaseSync`), requiring zero native C++ compiler toolchains for maximum portability across Linux, Termux (Android), macOS, and container runtimes.
 - **Enterprise-Grade Credential Security**: Credentials encrypted at rest using **AES-256-GCM** with unique IVs and authentication tags. Secrets are never exposed to the frontend.

@@ -23,11 +23,12 @@ export class GeminiNode extends BaseNode {
       name: 'model',
       displayName: 'Model',
       type: 'options',
-      default: 'gemini-2.5-flash',
+      default: 'gemini-3.8-flash',
       options: [
-        { name: 'Gemini 2.5 Flash (Fastest & Multimodal)', value: 'gemini-2.5-flash' },
+        { name: 'Gemini 3.8 Flash (Latest, Fastest & Multimodal)', value: 'gemini-3.8-flash' },
+        { name: 'Gemini 3.8 Pro (Latest Deep Reasoning)', value: 'gemini-3.8-pro' },
         { name: 'Gemini 1.5 Flash (Standard Fast)', value: 'gemini-1.5-flash' },
-        { name: 'Gemini 1.5 Pro (Deep Reasoning & Analysis)', value: 'gemini-1.5-pro' }
+        { name: 'Gemini 1.5 Pro (Standard Reasoning)', value: 'gemini-1.5-pro' }
       ]
     },
     {
@@ -85,7 +86,7 @@ export class GeminiNode extends BaseNode {
     const results: DataItem[] = [];
 
     for (let i = 0; i < items.length; i++) {
-      const model = context.getNodeParameter('model', i, 'gemini-2.5-flash');
+      const model = context.getNodeParameter('model', i, 'gemini-3.8-flash');
       const prompt = context.getNodeParameter('prompt', i, '');
       const systemInstruction = context.getNodeParameter('systemInstruction', i, '');
       const jsonOutput = context.getNodeParameter('jsonOutput', i, false);

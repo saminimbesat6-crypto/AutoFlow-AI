@@ -9,6 +9,10 @@ import { MergeNode } from './core/merge';
 import { CodeNode } from './core/code';
 import { GeminiNode } from './ai/gemini-node';
 import { AiAgentNode } from './ai/ai-agent-node';
+import { FilterNode } from './core/filter';
+import { DelayNode } from './core/delay';
+import { CryptoNode } from './core/crypto';
+import { WebhookResponseNode } from './core/webhook-response';
 
 export class NodeRegistry {
   private static instance: NodeRegistry;
@@ -34,9 +38,13 @@ export class NodeRegistry {
     // Core Actions & Logic
     this.register(new HttpRequestNode());
     this.register(new IfConditionNode());
+    this.register(new FilterNode());
+    this.register(new DelayNode());
     this.register(new SetDataNode());
     this.register(new MergeNode());
     this.register(new CodeNode());
+    this.register(new CryptoNode());
+    this.register(new WebhookResponseNode());
 
     // AI & Gemini
     this.register(new GeminiNode());

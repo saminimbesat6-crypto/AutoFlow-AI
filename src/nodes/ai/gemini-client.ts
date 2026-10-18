@@ -57,10 +57,14 @@ export interface GeminiResponse {
 }
 
 export class GeminiClient {
-  private static DEFAULT_MODEL = 'gemini-2.5-flash';
+  private static DEFAULT_MODEL = 'gemini-3.8-flash';
 
   static async generateContent(options: GeminiRequestOptions): Promise<GeminiResponse> {
-    const model = options.model || this.DEFAULT_MODEL;
+    let model = options.model || this.DEFAULT_MODEL;
+    if (model === 'gemini-2.5-flash') {
+      model = 'gemini-3.8-flash';
+    }
+
     const apiKey = options.apiKey;
 
     if (!apiKey) {
@@ -92,8 +96,9 @@ export class GeminiClient {
       body.tools = options.tools;
     }
 
+    const timeoutMs = options.timeoutMs || Number(process.env.GEMINI_TIMEOUT_MS) || 120000;
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), options.timeoutMs || 60000);
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
     let res: Response;
     try {
@@ -106,7 +111,7 @@ export class GeminiClient {
     } catch (err: any) {
       clearTimeout(timeout);
       if (err.name === 'AbortError') {
-        throw new Error(`Gemini request timed out after ${options.timeoutMs || 60000}ms`);
+        throw new Error(`Gemini request timed out after ${timeoutMs}ms. Please try a simpler prompt or check your network.`);
       }
       throw new Error(`Network error calling Gemini API: ${err.message}`);
     } finally {

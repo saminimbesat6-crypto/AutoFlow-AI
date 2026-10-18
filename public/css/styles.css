@@ -785,3 +785,932 @@ textarea.form-control {
   from { transform: translateX(100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
 }
+
+/* ========================================================
+   Gemini AI Copilot Styling
+   ======================================================== */
+
+.btn-ai-copilot {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: #fff !important;
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  box-shadow: 0 0 14px rgba(124, 58, 237, 0.35);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-ai-copilot:hover {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+  transform: translateY(-1px);
+}
+
+.btn-ai-pill {
+  background: rgba(139, 92, 246, 0.15);
+  color: #c4b5fd !important;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 20px;
+  font-weight: 600;
+  padding: 4px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-ai-pill:hover {
+  background: rgba(139, 92, 246, 0.28);
+  border-color: #a78bfa;
+}
+
+/* AI Copilot Drawer */
+.ai-copilot-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 440px;
+  height: 100%;
+  background: #0f172a;
+  border-left: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  z-index: 45;
+  transform: translateX(100%);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ai-copilot-drawer.open {
+  transform: translateX(0);
+}
+
+.ai-header {
+  background: #111827;
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ai-title-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ai-badge-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #9333ea, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 0 12px rgba(147, 51, 234, 0.5);
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #eab308;
+  display: inline-block;
+}
+
+.status-indicator.connected {
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+}
+
+/* Quick Key Banner */
+.ai-key-banner {
+  background: rgba(234, 179, 8, 0.1);
+  border-bottom: 1px solid rgba(234, 179, 8, 0.3);
+  padding: 10px 14px;
+}
+
+/* Chat Body */
+.ai-chat-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ai-message {
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-message.user {
+  align-items: flex-end;
+}
+
+.ai-message.user .ai-bubble {
+  background: linear-gradient(135deg, #4338ca, #6366f1);
+  color: #fff;
+  border-radius: 12px 12px 2px 12px;
+  border: 1px solid rgba(165, 180, 252, 0.2);
+}
+
+.ai-message.assistant {
+  align-items: flex-start;
+}
+
+.ai-message.assistant .ai-bubble {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-radius: 12px 12px 12px 2px;
+  border: 1px solid var(--border-color);
+  width: 100%;
+}
+
+.ai-bubble {
+  padding: 12px 14px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  word-break: break-word;
+}
+
+.ai-prompt-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.ai-chip {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.35;
+}
+
+.ai-chip:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: #8b5cf6;
+  color: #fff;
+  transform: translateX(3px);
+}
+
+/* Workflow Generated Card inside Chat */
+.ai-workflow-card {
+  margin-top: 10px;
+  background: #0f172a;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ai-card-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #a78bfa;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-card-pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  font-size: 0.78rem;
+}
+
+.ai-node-badge {
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  padding: 3px 8px;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.ai-node-arrow {
+  color: var(--text-muted);
+  font-weight: bold;
+}
+
+.ai-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* Chat Input Footer */
+.ai-chat-footer {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border-color);
+  background: #111827;
+}
+
+.ai-input-container {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.ai-chat-textarea {
+  flex: 1;
+  background: #1e293b;
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: none;
+  height: 52px;
+  max-height: 120px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.ai-chat-textarea:focus {
+  border-color: #8b5cf6;
+}
+
+.ai-send-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.15s ease;
+}
+
+.ai-send-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
+}
+
+.ai-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Floating AI Copilot Bubble */
+.floating-ai-copilot-bubble {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  background: linear-gradient(135deg, #7c3aed, #3b82f6);
+  color: #fff;
+  border: 1px solid rgba(167, 139, 250, 0.5);
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.45);
+  border-radius: 30px;
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 40;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-ai-copilot-bubble:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.65);
+}
+
+.floating-sparkle {
+  font-size: 1.15rem;
+  animation: sparkle-pulse 2s infinite ease-in-out;
+}
+
+@keyframes sparkle-pulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.2); filter: brightness(1.3); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .app-header {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .app-header::-webkit-scrollbar {
+    display: none;
+  }
+  .editor-sidebar {
+    width: 220px;
+  }
+  .editor-toolbar {
+    left: 236px;
+  }
+  .ai-copilot-drawer {
+    width: 100%;
+    max-width: 100vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .editor-sidebar {
+    display: none;
+  }
+  .editor-toolbar {
+    left: 12px;
+    right: 12px;
+  }
+}
+
+/* ========================================================
+   Fullscreen Workflow Chart & Output Modal
+   ======================================================== */
+
+.fullscreen-modal {
+  position: fixed;
+  inset: 0;
+  background: #090d16;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.fullscreen-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fullscreen-header {
+  height: 60px;
+  background: #111827;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  gap: 16px;
+}
+
+.fullscreen-title-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fs-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.fs-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.fs-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.fs-nav-tabs {
+  display: flex;
+  background: #1e293b;
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.fs-tab {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.fs-tab:hover {
+  color: #fff;
+}
+
+.fs-tab.active {
+  background: var(--bg-tertiary);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.fs-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fullscreen-body {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #090d16;
+}
+
+.fs-panel {
+  position: absolute;
+  inset: 0;
+  display: none;
+  overflow: auto;
+  padding: 24px;
+}
+
+.fs-panel.active {
+  display: flex;
+}
+
+/* 1. Flowchart Chart Styling */
+.fs-chart-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100%;
+}
+
+.fs-flowchart-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.fs-node-card {
+  background: #111827;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  width: 240px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.fs-node-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  border-color: #8b5cf6;
+}
+
+.fs-node-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.fs-node-card-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #fff;
+}
+
+.fs-node-card-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #f1f5f9;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fs-node-card-type {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.fs-node-card-body {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 8px;
+}
+
+.fs-chart-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b5cf6;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* 2. Execution Output View */
+.fs-output-container {
+  flex: 1;
+  display: flex;
+  gap: 20px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fs-output-sidebar {
+  width: 280px;
+  background: #111827;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.fs-node-pill {
+  background: #1e293b;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.15s ease;
+}
+
+.fs-node-pill:hover {
+  background: #334155;
+  border-color: #8b5cf6;
+}
+
+.fs-node-pill.active {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: #8b5cf6;
+  color: #fff;
+}
+
+.fs-node-pill-status {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.fs-node-pill-status.success {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.fs-node-pill-status.error {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.fs-output-content {
+  flex: 1;
+  background: #111827;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.fs-output-header {
+  padding: 12px 16px;
+  background: #1e293b;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #f1f5f9;
+}
+
+.fs-output-code {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  background: #090d16;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* 3. JSON Viewer */
+.fs-json-viewer {
+  flex: 1;
+  background: #111827;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 20px;
+  font-family: monospace;
+  font-size: 0.88rem;
+  color: #38bdf8;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* --- Real-Time Flowchart Node Cards & Execution States --- */
+.fs-node-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.fs-node-card-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fs-node-exec-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fs-node-exec-badge.status-waiting {
+  background: rgba(100, 116, 139, 0.15);
+  color: #94a3b8;
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.fs-node-exec-badge.status-running {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.fs-node-exec-badge.status-success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.fs-node-exec-badge.status-error {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+/* Card highlight states */
+.fs-node-card.status-running {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.5), inset 0 0 15px rgba(245, 158, 11, 0.1) !important;
+  transform: translateY(-4px) scale(1.02);
+  animation: pulseCardRunning 1.2s infinite alternate;
+}
+
+@keyframes pulseCardRunning {
+  0% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3), inset 0 0 5px rgba(245, 158, 11, 0.1); }
+  100% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.7), inset 0 0 20px rgba(245, 158, 11, 0.2); }
+}
+
+.fs-node-card.status-success {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.4), inset 0 0 10px rgba(16, 185, 129, 0.08) !important;
+  transform: translateY(-2px);
+}
+
+.fs-node-card.status-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.5) !important;
+}
+
+/* --- Real-Time Flowchart Connector Arrows --- */
+.fs-chart-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 6px;
+  color: #475569;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.fs-connector-line {
+  width: 32px;
+  height: 4px;
+  background: #334155;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.fs-connector-arrow {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #475569;
+  line-height: 1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Connector Running State */
+.fs-chart-connector.status-running .fs-connector-line {
+  background: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b;
+}
+
+.fs-chart-connector.status-running .fs-connector-arrow {
+  color: #f59e0b;
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8));
+  transform: translateX(4px) scale(1.15);
+  animation: pulseArrowRunning 0.8s infinite alternate;
+}
+
+@keyframes pulseArrowRunning {
+  0% { transform: translateX(0px) scale(1); }
+  100% { transform: translateX(5px) scale(1.2); }
+}
+
+/* Connector Success State: TURNS VIBRANT GLOWING GREEN! */
+.fs-chart-connector.status-success .fs-connector-line {
+  background: #10b981;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.9);
+  height: 5px;
+}
+
+.fs-chart-connector.status-success .fs-connector-arrow {
+  color: #10b981;
+  filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.95)) drop-shadow(0 0 20px rgba(16, 185, 129, 0.6));
+  transform: scale(1.35);
+  animation: arrowSuccessPop 0.5s ease-out;
+}
+
+@keyframes arrowSuccessPop {
+  0% { transform: scale(0.9); color: #fff; filter: drop-shadow(0 0 20px #fff); }
+  50% { transform: scale(1.5); color: #34d399; filter: drop-shadow(0 0 25px #10b981); }
+  100% { transform: scale(1.35); color: #10b981; filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.95)); }
+}
+
+.fs-chart-connector.status-error .fs-connector-line {
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+}
+
+.fs-chart-connector.status-error .fs-connector-arrow {
+  color: #ef4444;
+  filter: drop-shadow(0 0 8px #ef4444);
+}
+
+/* --- Real-Time Copilot Canvas Construction Animations --- */
+.canvas-node.node-building {
+  animation: nodePopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, glowBuilding 1.5s infinite alternate;
+  border-color: #8b5cf6 !important;
+}
+
+@keyframes nodePopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes glowBuilding {
+  0% {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.4), inset 0 0 10px rgba(139, 92, 246, 0.15);
+  }
+  100% {
+    box-shadow: 0 0 35px rgba(139, 92, 246, 0.8), 0 0 15px rgba(56, 189, 248, 0.6), inset 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+}
+
+.connection-path.building-wire {
+  stroke: #8b5cf6;
+  stroke-width: 3.5px;
+  stroke-dasharray: 8 4;
+  animation: flowDash 0.8s linear infinite;
+  filter: drop-shadow(0 0 8px #8b5cf6);
+}
+
+/* Real-Time Green Flow on Canvas Wires */
+.connection-path.success-flow {
+  stroke: #10b981 !important;
+  stroke-width: 3.5px !important;
+  stroke-dasharray: 10 5;
+  animation: flowDash 0.8s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.9)) !important;
+}
+
+.connection-path.running-flow {
+  stroke: #f59e0b !important;
+  stroke-width: 3.5px !important;
+  stroke-dasharray: 8 4;
+  animation: flowDash 0.6s linear infinite;
+  filter: drop-shadow(0 0 8px #f59e0b) !important;
+}
+
+@keyframes flowDash {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+/* Copilot Real-Time Construction Console in Chat */
+.ai-live-builder {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+.ai-live-builder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-weight: 700;
+  color: #c084fc;
+}
+
+.ai-live-builder-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ai-builder-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+}
+
+.ai-builder-step.active {
+  opacity: 1;
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.ai-builder-step.done {
+  opacity: 1;
+  color: #4ade80;
+}
+
+
+

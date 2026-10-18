@@ -272,6 +272,10 @@ class WorkflowCanvas {
         const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         pathEl.setAttribute('d', this.calculateBezierPath(sourcePos.x, sourcePos.y, targetPos.x, targetPos.y));
         pathEl.setAttribute('class', 'connection-path');
+        pathEl.dataset.source = sourceNode.name;
+        pathEl.dataset.sourceId = sourceNode.id;
+        pathEl.dataset.target = targetNode.name;
+        pathEl.dataset.targetId = targetNode.id;
         if (this.selectedConnectionIndex === index) {
           pathEl.style.stroke = '#ef4444';
           pathEl.style.strokeWidth = '4px';
@@ -444,5 +448,44 @@ class WorkflowCanvas {
       badge.className = 'node-status-badge';
       badge.textContent = '';
     });
+    this.clearConnectionHighlights();
+  }
+
+  highlightConnection(sourceNameOrId, targetNameOrId = null, status = 'success') {
+    const paths = this.svg.querySelectorAll('.connection-path');
+    paths.forEach((p) => {
+      const matchSource = p.dataset.source === sourceNameOrId || p.dataset.sourceId === sourceNameOrId;
+      const matchTarget = !targetNameOrId || p.dataset.target === targetNameOrId || p.dataset.targetId === targetNameOrId;
+
+      if (matchSource && matchTarget) {
+        p.classList.remove('running-flow', 'success-flow');
+        if (status === 'success') {
+          p.classList.add('success-flow');
+        } else if (status === 'running') {
+          p.classList.add('running-flow');
+        }
+      }
+    });
+  }
+
+  clearConnectionHighlights() {
+    const paths = this.svg.querySelectorAll('.connection-path');
+    paths.forEach((p) => {
+      p.classList.remove('running-flow', 'success-flow');
+    });
+  }
+
+  panToNode(nodeId) {
+    if (!this.workflow || !this.workflow.nodes) return;
+    const node = this.workflow.nodes.find((n) => n.id === nodeId || n.name === nodeId);
+    if (!node || !node.position) return;
+
+    const rect = this.container.getBoundingClientRect();
+    const targetPanX = (rect.width / 2) - ((node.position.x + 110) * this.scale);
+    const targetPanY = (rect.height / 2) - ((node.position.y + 45) * this.scale);
+
+    this.panX = Math.round(targetPanX);
+    this.panY = Math.round(targetPanY);
+    this.updateTransform();
   }
 }
